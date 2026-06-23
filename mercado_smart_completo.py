@@ -54,29 +54,43 @@ def listar_produtos():
         )
 
 def adicionar_produto():
-    try:
-        novo_id = max([p["id"] for p in produtos_catalogo], default=0) + 1
+    produtos_adicionados = 0
 
-        nome = input("Nome do produto: ")
-        marca = input("Marca: ")
-        categoria = input("Categoria: ")
-        preco = float(input("Preço: ").replace(",", "."))
-        estoque = int(input("Estoque inicial: "))
+    while True:
+        try:
+            novo_id = max([p["id"] for p in produtos_catalogo], default=0) + 1
 
-        produtos_catalogo.append({
-            "id": novo_id,
-            "nome": nome,
-            "marca": marca,
-            "categoria": categoria,
-            "preco": preco,
-            "estoque": estoque
-        })
+            print(f"\n--- Novo produto (ID {novo_id}) ---")
+            nome = input("Nome do produto: ")
+            marca = input("Marca: ")
+            categoria = input("Categoria: ")
+            preco = float(input("Preço: ").replace(",", "."))
+            estoque = int(input("Estoque inicial: "))
 
+            produtos_catalogo.append({
+                "id": novo_id,
+                "nome": nome,
+                "marca": marca,
+                "categoria": categoria,
+                "preco": preco,
+                "estoque": estoque
+            })
+
+            produtos_adicionados += 1
+            print(f"✓ Produto '{nome}' adicionado com sucesso!")
+
+        except ValueError:
+            print("Dados inválidos. Esse produto não foi adicionado.")
+
+        continuar = input("\nAdicionar outro produto? (s/n): ").strip().lower()
+        if continuar != "s":
+            break
+
+    if produtos_adicionados > 0:
         salvar_dados()
-        print("✓ Produto adicionado com sucesso!")
-
-    except ValueError:
-        print("Dados inválidos.")
+        print(f"\n✓ {produtos_adicionados} produto(s) adicionado(s) e salvo(s) com sucesso!")
+    else:
+        print("\nNenhum produto foi adicionado.")
 
 def remover_produto():
     try:
